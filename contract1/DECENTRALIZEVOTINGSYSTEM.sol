@@ -55,4 +55,28 @@ contract Project {
         require(electionStarted, "Election not started");
         electionStarted = false;
     }
+
+    // Function to get election winner
+    function getWinner() public view returns (string memory winnerName, uint winnerVoteCount) {
+        require(!electionStarted, "Election is still ongoing");
+        require(candidates.length > 0, "No candidates available");
+
+        uint highestVotes = 0;
+        uint winnerIndex = 0;
+
+        for (uint i = 0; i < candidates.length; i++) {
+            if (candidates[i].voteCount > highestVotes) {
+                highestVotes = candidates[i].voteCount;
+                winnerIndex = i;
+            }
+        }
+
+        winnerName = candidates[winnerIndex].name;
+        winnerVoteCount = candidates[winnerIndex].voteCount;
+    }
+
+    // Function to check if an address has voted
+    function getVoterStatus(address _voter) public view returns (bool) {
+        return hasVoted[_voter];
+    }
 }
